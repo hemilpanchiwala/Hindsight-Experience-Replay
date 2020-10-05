@@ -9,7 +9,6 @@ class BitFlipEnv:
     """
     def __init__(self, n_bits):
         self.n_bits = n_bits
-        self.reward = -1
         self.state = np.random.randint(2, size=self.n_bits)
         self.goal = np.random.randint(2, size=self.n_bits)
 
