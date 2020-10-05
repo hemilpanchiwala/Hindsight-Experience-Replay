@@ -25,7 +25,7 @@ class BitFlipEnv:
         """
         self.state[action] = self.state[action] ^ 1
         done = False
-        if self.state == self.goal:
+        if np.array_equal(self.state, self.goal):
             done = True
             reward = 0
         else:

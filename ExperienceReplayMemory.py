@@ -9,8 +9,8 @@ class ExperienceReplayMemory(object):
 
         # initializes the state, next_state, action, reward, and terminal experience memory
         print(type(input_dims))
-        self.state_memory = np.zeros((memory_size, *input_dims), dtype=np.float32)
-        self.next_state_memory = np.zeros((memory_size, *input_dims), dtype=np.float32)
+        self.state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
+        self.next_state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
         self.reward_memory = np.zeros(memory_size, dtype=np.float32)
         self.action_memory = np.zeros(memory_size, dtype=np.int64)
         self.terminal_memory = np.zeros(memory_size, dtype=bool)
