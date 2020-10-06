@@ -30,7 +30,7 @@ class BitFlipEnv:
             reward = 0
         else:
             reward = -1
-        return self.state, reward, done
+        return np.copy(self.state), reward, done
 
     def print_state(self):
         """

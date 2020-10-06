@@ -65,4 +65,4 @@ if __name__ == '__main__':
     plt.xlabel('Number of Episodes')
     plt.ylim([0, 1])
 
-    plt.savefig('/home/blackreaper/Documents/temp/duelingdqn/abc.png')
+    plt.savefig('/home/blackreaper/Documents/temp/duelingdqn/abc1.png')
