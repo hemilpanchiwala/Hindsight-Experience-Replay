@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 
 import BitFlipEnv as bflip
-import DQNAgent as dqn
-
+from dqn_without_her import DQNAgent as dqn
 
 if __name__ == '__main__':
 

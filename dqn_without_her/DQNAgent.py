@@ -1,11 +1,11 @@
 import DeepQNetwork as dqn
-import HERMemory as her
+from dqn_without_her import ExperienceReplayMemory as erm
 
 import numpy as np
 import torch
 
 
-class DQNAgentWithHER(object):
+class DQNAgent(object):
     def __init__(self, learning_rate, n_actions, input_dims, gamma,
                  epsilon, batch_size, memory_size, replace_network_count,
                  dec_epsilon=1e-5, min_epsilon=0.1, checkpoint_dir='/tmp/ddqn/'):
@@ -31,8 +31,8 @@ class DQNAgentWithHER(object):
                                        input_dims=input_dims, name='q_next',
                                        checkpoint_dir=checkpoint_dir)
 
-        self.experience_replay_memory = her.HindsightExperienceReplayMemory(memory_size=memory_size,
-                                                                            input_dims=input_dims)
+        self.experience_replay_memory = erm.ExperienceReplayMemory(memory_size=memory_size,
+                                                                   input_dims=input_dims)
 
     def decrement_epsilon(self):
         """
@@ -42,19 +42,19 @@ class DQNAgentWithHER(object):
         self.epsilon = self.epsilon - self.dec_epsilon if self.epsilon > self.min_epsilon \
             else self.min_epsilon
 
-    def store_experience(self, state, action, reward, next_state, done, goal):
+    def store_experience(self, state, action, reward, next_state, done):
         """
         Saves the experience to the replay memory
         """
         self.experience_replay_memory.add_experience(state=state, action=action,
                                                      reward=reward, next_state=next_state,
-                                                     done=done, goal=goal)
+                                                     done=done)
 
     def get_sample_experience(self):
         """
         Gives a sample experience from the experience replay memory
         """
-        state, action, reward, next_state, done, goal = self.experience_replay_memory.get_random_experience(
+        state, action, reward, next_state, done = self.experience_replay_memory.get_random_experience(
             self.batch_size)
 
         t_state = torch.tensor(state).to(self.q_eval.device)
@@ -62,9 +62,8 @@ class DQNAgentWithHER(object):
         t_reward = torch.tensor(reward).to(self.q_eval.device)
         t_next_state = torch.tensor(next_state).to(self.q_eval.device)
         t_done = torch.tensor(done).to(self.q_eval.device)
-        t_goal = torch.tensor(goal).to(self.q_eval.device)
 
-        return t_state, t_action, t_reward, t_next_state, t_done, t_goal
+        return t_state, t_action, t_reward, t_next_state, t_done
 
     def replace_target_network(self):
         """
@@ -73,13 +72,12 @@ class DQNAgentWithHER(object):
         if self.learn_steps_count % self.replace_network_count == 0:
             self.q_next.load_state_dict(self.q_eval.state_dict())
 
-    def choose_action(self, observation, goal):
+    def choose_action(self, observation):
         """
         Chooses an action with epsilon-greedy method
         """
         if np.random.random() > self.epsilon:
-            concat_state_goal = np.concatenate([observation, goal])
-            state = torch.tensor([concat_state_goal], dtype=torch.float).to(self.q_eval.device)
+            state = torch.tensor([observation], dtype=torch.float).to(self.q_eval.device)
             actions = self.q_eval.forward(state)
 
             action = torch.argmax(actions).item()
@@ -95,15 +93,12 @@ class DQNAgentWithHER(object):
         self.q_eval.optimizer.zero_grad()
         self.replace_target_network()
 
-        state, action, reward, next_state, done, goal = self.get_sample_experience()
+        state, action, reward, next_state, done = self.get_sample_experience()
         # Gets the evenly spaced batches
         batches = np.arange(self.batch_size)
 
-        concat_state_goal = torch.cat((state, goal), 1)
-        concat_next_state_goal = torch.cat((next_state, goal), 1)
-
-        q_pred = self.q_eval.forward(concat_state_goal)[batches, action]
-        q_next = self.q_next.forward(concat_next_state_goal).max(dim=1)[0]
+        q_pred = self.q_eval.forward(state)[batches, action]
+        q_next = self.q_next.forward(next_state).max(dim=1)[0]
 
         q_next[done] = 0.0
         q_target = reward + self.gamma * q_next

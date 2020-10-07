@@ -31,14 +31,6 @@ class HindsightExperienceReplayMemory(object):
 
         self.counter += 1
 
-    def get_transition(self, index):
-        state = self.state_memory[index]
-        action = self.action_memory[index]
-        reward = self.reward_memory[index]
-        next_state = self.next_state_memory[index]
-
-        return state, action, reward, next_state
-
     def get_random_experience(self, batch_size):
         """
         Returns any random memory from the experience replay memory.

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import BitFlipEnv as bflip
-import DQNAgentWithHER as dqnHER
+from dqn_with_her import DQNAgentWithHER as dqnHER
 
 if __name__ == '__main__':
 
