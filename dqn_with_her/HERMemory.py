@@ -2,17 +2,16 @@ import numpy as np
 
 
 class HindsightExperienceReplayMemory(object):
-    def __init__(self, memory_size, input_dims):
+    def __init__(self, memory_size, input_dims, n_actions):
         super(HindsightExperienceReplayMemory, self).__init__()
         self.max_mem_size = memory_size
         self.counter = 0
 
         # initializes the state, next_state, action, reward, and terminal experience memory
-        print(type(input_dims))
         self.state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
         self.next_state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
         self.reward_memory = np.zeros(memory_size, dtype=np.float32)
-        self.action_memory = np.zeros(memory_size, dtype=np.int64)
+        self.action_memory = np.zeros((memory_size, n_actions), dtype=np.float32)
         self.terminal_memory = np.zeros(memory_size, dtype=bool)
         self.goal_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
 

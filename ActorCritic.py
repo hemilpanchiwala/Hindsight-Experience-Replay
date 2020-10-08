@@ -10,7 +10,8 @@ class Actor(nn.Module):
     def __init__(self, input_dims, n_actions, learning_rate, checkpoint_dir, name):
         super(Actor, self).__init__()
 
-        self.fc1 = nn.Linear(input_dims, 512)
+        self.input = input_dims
+        self.fc1 = nn.Linear(2*input_dims, 512)
         self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256, n_actions)
 
@@ -44,7 +45,7 @@ class Critic(nn.Module):
     def __init__(self, input_dims, n_actions, learning_rate, checkpoint_dir, name):
         super(Critic, self).__init__()
 
-        self.fc1 = nn.Linear(input_dims + n_actions, 512)
+        self.fc1 = nn.Linear(2*input_dims + n_actions, 512)
         self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256, 1)
 
@@ -61,9 +62,9 @@ class Critic(nn.Module):
     def forward(self, data1, data2):
         fc_layer1 = F.relu(self.fc1(torch.cat((data1, data2), 1)))
         fc_layer2 = F.relu(self.fc2(fc_layer1))
-        actions = self.fc3(fc_layer2)
+        value = self.fc3(fc_layer2)
 
-        return actions
+        return value
 
     def save_checkpoint(self):
         print('Saving checkpoint ...')
