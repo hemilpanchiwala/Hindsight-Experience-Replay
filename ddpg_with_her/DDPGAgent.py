@@ -2,9 +2,9 @@ import numpy as np
 
 import torch
 
-from ActorCritic import Actor, Critic
+from ddpg_with_her.ActorCritic import Actor, Critic
 from dqn_with_her import HERMemory as her
-import OUNoise as noise
+from ddpg_with_her import OUNoise as noise
 
 
 class DDPGAgent:

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import ContinuousEnv as cenv
-import DDPGAgent as ddpgAgent
+from ddpg_with_her import DDPGAgent
 
 if __name__ == '__main__':
     size = 5
@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     load_checkpoint = False
 
-    agent = ddpgAgent.DDPGAgent(actor_learning_rate=0.0001, critic_learning_rate=0.001, n_actions=2,
+    agent = DDPGAgent.DDPGAgent(actor_learning_rate=0.0001, critic_learning_rate=0.001, n_actions=2,
                                 input_dims=2, gamma=0.99,
                                 memory_size=10000, batch_size=64,
                                 checkpoint_dir='/home/blackreaper/Documents/temp/duelingdqn')
