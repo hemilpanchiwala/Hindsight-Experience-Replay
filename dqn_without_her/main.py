@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 
 import BitFlipEnv as bflip
@@ -16,11 +17,13 @@ if __name__ == '__main__':
 
     load_checkpoint = False
 
+    checkpoint_dir = os.path.join(os.getcwd(), '/checkpoint/')
+
     agent = dqn.DQNAgent(learning_rate=0.0001, n_actions=n_bits,
                          input_dims=n_bits, gamma=0.99,
                          epsilon=0.9, batch_size=64, memory_size=10000,
                          replace_network_count=50,
-                         checkpoint_dir='/home/blackreaper/Documents/temp/duelingdqn')
+                         checkpoint_dir=checkpoint_dir)
 
     if load_checkpoint:
         agent.load_model()
@@ -64,4 +67,4 @@ if __name__ == '__main__':
     plt.xlabel('Number of Episodes')
     plt.ylim([0, 1])
 
-    plt.savefig('/home/blackreaper/Documents/temp/duelingdqn/abc1.png')
+    plt.savefig(plt.savefig(os.path.join(os.getcwd(), '/plots/')))

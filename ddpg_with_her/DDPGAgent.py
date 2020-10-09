@@ -22,19 +22,19 @@ class DDPGAgent:
 
         self.actor = Actor(input_dims=input_dims, n_actions=n_actions,
                            learning_rate=actor_learning_rate, checkpoint_dir=checkpoint_dir,
-                           name='actor4')
+                           name='actor3')
 
         self.critic = Critic(input_dims=input_dims, n_actions=n_actions,
                              learning_rate=critic_learning_rate, checkpoint_dir=checkpoint_dir,
-                             name='critic4')
+                             name='critic3')
 
         self.target_actor = Actor(input_dims=input_dims, n_actions=n_actions,
                                   learning_rate=actor_learning_rate, checkpoint_dir=checkpoint_dir,
-                                  name='target_actor4')
+                                  name='target_actor3')
 
         self.target_critic = Critic(input_dims=input_dims, n_actions=n_actions,
                                     learning_rate=critic_learning_rate, checkpoint_dir=checkpoint_dir,
-                                    name='target_critic4')
+                                    name='target_critic3')
 
         self.memory = her.HindsightExperienceReplayMemory(memory_size=memory_size,
                                                           input_dims=input_dims, n_actions=n_actions)
@@ -43,7 +43,7 @@ class DDPGAgent:
 
     def store_experience(self, state, action, reward, next_state, done, goal):
         """
-        Saves the experience to the replay memory
+        Saves the experience to the hindsight replay memory
         """
         self.memory.add_experience(state=state, action=action,
                                    reward=reward, next_state=next_state,
@@ -51,7 +51,7 @@ class DDPGAgent:
 
     def get_sample_experience(self):
         """
-        Gives a sample experience from the experience replay memory
+        Gives a sample experience from the hindsight replay memory
         """
         state, action, reward, next_state, done, goal = self.memory.get_random_experience(
             self.batch_size)
@@ -66,8 +66,10 @@ class DDPGAgent:
         return t_state, t_action, t_reward, t_next_state, t_done, t_goal
 
     def choose_action(self, observation, goal):
-
-        if np.random.random() > 0.2:
+        """
+        Selects actions using epsilon-greedy approach with OU-noise added to the greedy actions
+        """
+        if np.random.random() > 0.1:
             state = torch.tensor([np.concatenate([observation, goal])], dtype=torch.float).to(self.actor.device)
             mu = self.actor.forward(state).to(self.actor.device)
             action = mu + torch.tensor(self.ou_noise(), dtype=torch.float).to(self.actor.device)
@@ -80,6 +82,9 @@ class DDPGAgent:
         return selected_action
 
     def learn(self):
+        """
+        Learns the y function
+        """
         if self.memory.counter < self.batch_size:
             return
 
@@ -123,12 +128,18 @@ class DDPGAgent:
         self.target_critic.load_state_dict(critic_parameters)
 
     def save_model(self):
+        """
+        Saves the values at the checkpoint
+        """
         self.actor.save_checkpoint()
         self.critic.save_checkpoint()
         self.target_actor.save_checkpoint()
         self.target_critic.save_checkpoint()
 
     def load_model(self):
+        """
+        Loads the values at the checkpoint
+        """
         self.actor.load_checkpoint()
         self.critic.load_checkpoint()
         self.target_actor.load_checkpoint()

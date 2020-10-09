@@ -1,8 +1,8 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-import ContinuousEnv as cenv
-from ddpg_with_her import DDPGAgent
+from ddpg_with_her import DDPGAgent, ContinuousEnv as cenv
 
 if __name__ == '__main__':
     size = 5
@@ -16,14 +16,18 @@ if __name__ == '__main__':
 
     load_checkpoint = False
 
+    checkpoint_dir = os.path.join(os.getcwd(), '/checkpoint/')
+
+    # Initializes the DDPG agent
     agent = DDPGAgent.DDPGAgent(actor_learning_rate=0.0001, critic_learning_rate=0.001, n_actions=2,
                                 input_dims=2, gamma=0.99,
                                 memory_size=10000, batch_size=64,
-                                checkpoint_dir='/home/blackreaper/Documents/temp/duelingdqn')
+                                checkpoint_dir=checkpoint_dir)
 
     if load_checkpoint:
         agent.load_model()
 
+    # Iterate through the episodes
     for episode in range(n_episodes):
         env.reset_env()
         state = env.state
@@ -31,7 +35,7 @@ if __name__ == '__main__':
         done = False
         transitions = []
 
-        for p in range(30):
+        for p in range(10):
             if not done:
                 action = agent.choose_action(state, goal)
                 next_state, reward, done = env.take_step(action)
@@ -69,7 +73,6 @@ if __name__ == '__main__':
             win_percent.append(success / 100)
             success = 0
 
-    # print('Epsilon History:', epsilon_history)
     print('Episodes:', episodes)
     print('Win percentage:', win_percent)
 
@@ -81,4 +84,4 @@ if __name__ == '__main__':
     plt.xlabel('Number of Episodes')
     plt.ylim([0, 1])
 
-    plt.savefig('/home/blackreaper/Documents/temp/duelingdqn/abcwithout_tanh.png')
+    plt.savefig(os.path.join(os.getcwd(), '/plots/'))

@@ -7,6 +7,9 @@ import torch.optim as optim
 
 
 class Actor(nn.Module):
+    """
+    Defines a neural network for the actor (that derives the actions)
+    """
     def __init__(self, input_dims, n_actions, learning_rate, checkpoint_dir, name):
         super(Actor, self).__init__()
 
@@ -42,6 +45,9 @@ class Actor(nn.Module):
 
 
 class Critic(nn.Module):
+    """
+    Defines a neural network for the critic (that derives the value)
+    """
     def __init__(self, input_dims, n_actions, learning_rate, checkpoint_dir, name):
         super(Critic, self).__init__()
 

@@ -3,9 +3,8 @@ import numpy as np
 
 class ContinuousEnv:
     """
-    A simple bit flip environment
-    Bit of the current state flips as an action
-    Reward of -1 for each step
+    A continuous environment
+    A state is defined as a numpy array of size 2 with random values
     """
     def __init__(self, size):
         self.size = size
