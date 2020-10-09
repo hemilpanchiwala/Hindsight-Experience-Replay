@@ -37,7 +37,7 @@ class DQNAgent(object):
     def decrement_epsilon(self):
         """
         Decrements the epsilon after each step till it reaches minimum epsilon (0.1)
-        epsilon = epsilon - decrement (default is 0.99e-6)
+        epsilon = epsilon - decrement (default is 1e-5)
         """
         self.epsilon = self.epsilon - self.dec_epsilon if self.epsilon > self.min_epsilon \
             else self.min_epsilon

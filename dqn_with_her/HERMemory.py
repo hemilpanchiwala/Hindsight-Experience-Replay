@@ -2,6 +2,9 @@ import numpy as np
 
 
 class HindsightExperienceReplayMemory(object):
+    """
+    Hindsight Experience replay - Takes size, input dimensions and number of actions as parameters
+    """
     def __init__(self, memory_size, input_dims, n_actions):
         super(HindsightExperienceReplayMemory, self).__init__()
         self.max_mem_size = memory_size
@@ -17,7 +20,7 @@ class HindsightExperienceReplayMemory(object):
 
     def add_experience(self, state, action, reward, next_state, done, goal):
         """
-        Adds new experience to the memory.
+        Adds new experience to the memory
         """
         curr_index = self.counter % self.max_mem_size
 
@@ -32,7 +35,7 @@ class HindsightExperienceReplayMemory(object):
 
     def get_random_experience(self, batch_size):
         """
-        Returns any random memory from the experience replay memory.
+        Returns any random memory from the experience replay memory
         """
         rand_index = np.random.choice(min(self.counter, self.max_mem_size), batch_size)
 

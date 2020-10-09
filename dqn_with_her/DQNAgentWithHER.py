@@ -32,19 +32,20 @@ class DQNAgentWithHER(object):
                                        checkpoint_dir=checkpoint_dir)
 
         self.experience_replay_memory = her.HindsightExperienceReplayMemory(memory_size=memory_size,
-                                                                            input_dims=input_dims)
+                                                                            input_dims=input_dims,
+                                                                            n_actions=n_actions)
 
     def decrement_epsilon(self):
         """
         Decrements the epsilon after each step till it reaches minimum epsilon (0.1)
-        epsilon = epsilon - decrement (default is 0.99e-6)
+        epsilon = epsilon - decrement (default is 1e-5)
         """
         self.epsilon = self.epsilon - self.dec_epsilon if self.epsilon > self.min_epsilon \
             else self.min_epsilon
 
     def store_experience(self, state, action, reward, next_state, done, goal):
         """
-        Saves the experience to the replay memory
+        Saves the experience to the hindsight experience replay memory
         """
         self.experience_replay_memory.add_experience(state=state, action=action,
                                                      reward=reward, next_state=next_state,
@@ -52,7 +53,7 @@ class DQNAgentWithHER(object):
 
     def get_sample_experience(self):
         """
-        Gives a sample experience from the experience replay memory
+        Gives a sample experience from the hindsight experience replay memory
         """
         state, action, reward, next_state, done, goal = self.experience_replay_memory.get_random_experience(
             self.batch_size)

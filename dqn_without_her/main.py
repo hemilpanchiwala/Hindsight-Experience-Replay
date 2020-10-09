@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
     checkpoint_dir = os.path.join(os.getcwd(), '/checkpoint/')
 
+    # Initializes the DQN agent with simple experience replay
     agent = dqn.DQNAgent(learning_rate=0.0001, n_actions=n_bits,
                          input_dims=n_bits, gamma=0.99,
                          epsilon=0.9, batch_size=64, memory_size=10000,
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     if load_checkpoint:
         agent.load_model()
 
+    # Iterate through the episodes
     for episode in range(n_episodes):
         env.reset_env()
         state = env.state
@@ -46,6 +48,7 @@ if __name__ == '__main__':
                 if done:
                     success += 1
 
+        # Average over last 500 episodes to avoid spikes
         if episode % 500 == 0:
             print('success rate for last 500 episodes after', episode, ':', success/5)
             if len(win_percent) > 0 and (success / 500) > win_percent[len(win_percent) - 1]:

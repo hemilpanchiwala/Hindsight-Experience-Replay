@@ -1,5 +1,4 @@
 import os
-import numpy as np
 
 import torch
 import torch.nn as nn
@@ -8,6 +7,9 @@ import torch.optim as optim
 
 
 class DeepQNetwork(nn.Module):
+    """
+    Defines a deep Q network with a single hidden layer
+    """
     def __init__(self, learning_rate, n_actions, input_dims, checkpoint_dir, name):
         super(DeepQNetwork, self).__init__()
 

@@ -65,6 +65,7 @@ if __name__ == '__main__':
                                            transition[3], False, new_goal)
                     agent.learn()
 
+        # Average over last 100 episodes to avoid spikes
         if episode > 0 and episode % 100 == 0:
             print('success rate for last 100 episodes after', episode, ':', success)
             if len(win_percent) > 0 and (success / 100) > win_percent[len(win_percent) - 1]:
