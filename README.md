@@ -1,6 +1,6 @@
 # Hindsight-Experience-Replay
 
-This repository provides the Pytorch implementation of Hindsight Experience Replay on Deep Q Network and Deep Deterministic Policy Gradient.
+This repository provides the Pytorch implementation of Hindsight Experience Replay on Deep Q Network and Deep Deterministic Policy Gradient algorithms.
 
 Link to the paper: https://arxiv.org/pdf/1707.01495.pdf
 
