@@ -1,0 +1,5 @@
+numpy==1.18.5
+opencv-python==4.4.0.42
+matplotlib==3.2.2
+gym==0.17.2
+torch==1.6.0
