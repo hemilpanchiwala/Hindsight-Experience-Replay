@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 for p in range(n_bits):
                     transition = transitions[p]
                     if np.array_equal(transition[3], new_goal):
-                        agent.store_experience(transition[0], transition[1], 0,
+                        agent.store_experience(transition[0], transition[1], 0.0,
                                                transition[3], True, new_goal)
                         agent.learn()
                         break

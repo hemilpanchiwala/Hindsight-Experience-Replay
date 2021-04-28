@@ -14,7 +14,7 @@ class HindsightExperienceReplayMemory(object):
         self.state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
         self.next_state_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
         self.reward_memory = np.zeros(memory_size, dtype=np.float32)
-        self.action_memory = np.zeros((memory_size, n_actions), dtype=np.float32)
+        self.action_memory = np.zeros(memory_size, dtype=np.int64)
         self.terminal_memory = np.zeros(memory_size, dtype=bool)
         self.goal_memory = np.zeros((memory_size, input_dims), dtype=np.float32)
 
@@ -37,7 +37,7 @@ class HindsightExperienceReplayMemory(object):
         """
         Returns any random memory from the experience replay memory
         """
-        rand_index = np.random.choice(min(self.counter, self.max_mem_size), batch_size)
+        rand_index = np.random.choice(min(self.counter, self.max_mem_size), batch_size, replace=False)
 
         rand_state = self.state_memory[rand_index]
         rand_action = self.action_memory[rand_index]
